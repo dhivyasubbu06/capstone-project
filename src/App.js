@@ -1,14 +1,13 @@
-
-
-
 import React, { useState } from 'react';
+import { evaluate } from 'mathjs';
+
 import './App.css';
 
 function App() {
   const [input, setInput] = useState('');
 
   const handleClick = (value) => {
-    setInput(input + value);
+    setInput((prev) => prev + value);
   };
 
   const handleClear = () => {
@@ -17,11 +16,19 @@ function App() {
 
   const handleCalculate = () => {
     try {
-      setInput(eval(input).toString());
+      const result = evaluate(input);
+      setInput(result.toString());
     } catch {
       setInput('Error');
     }
   };
+
+  const buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '+'
+  ];
 
   return (
     <div className="App">
@@ -29,7 +36,7 @@ function App() {
       <div className="calculator">
         <input type="text" value={input} readOnly />
         <div className="buttons">
-          {'123+456-789*0./'.split('').map((char) => (
+          {buttons.map((char) => (
             <button key={char} onClick={() => handleClick(char)}>{char}</button>
           ))}
           <button onClick={handleClear}>C</button>
